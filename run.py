@@ -1,5 +1,6 @@
 # from turtle import title
-from flask import Flask, render_template,url_for
+# from crypt import methods
+from flask import Flask, render_template,url_for, flash, redirect
 from forms import RegisterForm, LoginForm
 app = Flask(__name__)
 
@@ -32,9 +33,12 @@ def about():
     return render_template('about.html', title='about')
 
 
-@app.route("/register")
+@app.route("/register", methods = ['GET', 'POST'])
 def register():
     form = RegisterForm
+    if form.validate_on_submit():
+        flash(f'Hi,Your account has been created successfully {form.username.data}', 'success')
+        return redirect(url_for('home'))
     return render_template('register.html', title='Register', form = form)
 
 @app.route("/login")
