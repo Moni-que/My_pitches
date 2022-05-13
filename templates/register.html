@@ -5,22 +5,54 @@
         <form method = "POST" action="">
             {{ form.hidden_tag }}
             <fieldset class = "form-group">
-                <legend class = "border-bottom -m-4">Join Today</legend>
+                <legend class = "border-bottom md-4">Join Us</legend>
                 <div class = "form-group">
                     {{ form.username.label(class = "form-control-label") }}
-                    {{ form.username(class = "form-control form-control-lg") }}
+                        {% if form.username.errors(class="form-control form-control-lg is-invalid") %}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                            {{ form.username(class = "form-control form-control-lg") }}
+                        {% endif %}
                 </div>
                 <div class = "form-group">
                     {{ form.email.label(class = "form-control-label") }}
-                    {{ form.email(class = "form-control form-control-lg") }}
+                    {% if form.email.errors(class="form-control form-control-lg is-invalid") %}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                            {{ form.email(class = "form-control form-control-lg") }}
+                        {% endif %}
                 </div>
                 <div class = "form-group">
                     {{ form.password.label(class = "form-control-label") }}
-                    {{ form.password(class = "form-control form-control-lg") }}
+                    {% if form.password.errors(class="form-control form-control-lg is-invalid") %}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                            {{ form.password(class = "form-control form-control-lg") }}
+                        {% endif %}
                 </div>
                 <div class = "form-group">
                     {{ form.password_confirm.label(class = "form-control-label") }}
-                    {{ form.password_confirm(class = "form-control form-control-lg") }}
+                    {% if form.password_confirm.errors(class="form-control form-control-lg is-invalid") %}
+                        <div class="invalid-feedback">
+                            {% for error in form.password_confirm.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                            {{ form.password_confirm(class = "form-control form-control-lg") }}
+                        {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">
