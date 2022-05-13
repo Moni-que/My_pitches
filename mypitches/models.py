@@ -1,17 +1,12 @@
-from flask import Flask
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from mypitches import db
 
-app = Flask(__name__)
-db = SQLAlchemy(app)
 
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer,primary_key = True)
     username = db.Column(db.String(255),index = True)
     email = db.Column(db.String(255),unique = True,index = True)
-    # role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
-    # bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
     pass_secure = db.Column(db.String(255))
     posts = db.relationship('Post',backref = 'author',lazy = "True")
