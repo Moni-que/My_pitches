@@ -35,15 +35,22 @@ def about():
 
 @app.route("/register", methods = ['GET', 'POST'])
 def register():
-    form = RegisterForm
+    form = RegisterForm()
     if form.validate_on_submit():
         flash(f'Hi,Your account has been created successfully {form.username.data}', 'success')
         return redirect(url_for('home'))
     return render_template('register.html', title='Register', form = form)
 
-@app.route("/login")
+@app.route("/login", methods = ['GET', 'POST'])
 def login():
-    form = LoginForm
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'bambi2gmail.com' and form.password.data == 'bambii':
+            flash('successfully logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login unsuccessful.please check your username  or pssword', 'danger')
+
     return render_template('login.html', title='Login', form = form)
 
 if __name__ == '__main__':
