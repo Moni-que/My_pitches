@@ -1,3 +1,4 @@
+from fileinput import filename
 from flask import render_template,url_for, flash, redirect,request
 from mypitches import app, db,bcrypt
 from mypitches.forms import RegisterForm, LoginForm
@@ -69,4 +70,5 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
-    return render_template('account.html',title = 'Account')
+    profile_pic_path = url_for('static', filename = 'Images/' + current_user.profile_pic_path)
+    return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path)
