@@ -7,25 +7,26 @@ import secrets
 import os
 
 
-posts = [
-    {
-        'author':'monique',
-        'title':'Blog_post_1',
-        'content':'first_content',
-        'date_posted':'April 1 2022'
-    },
-    {
-        'author':'bambi',
-        'title':'Blog_post_2',
-        'content':'second_content',
-        'date_posted':'April 1 2021'
-    }
-]
+# posts = [
+#     {
+#         'author':'monique',
+#         'title':'Blog_post_1',
+#         'content':'first_content',
+#         'date_posted':'April 1 2022'
+#     },
+#     {
+#         'author':'bambi',
+#         'title':'Blog_post_2',
+#         'content':'second_content',
+#         'date_posted':'April 1 2021'
+#     }
+# ]
 
 
 @app.route("/")
 @app.route("/home")
 def home():
+    posts = Post.query.all()
     return render_template('home.html', posts=posts)
 
 @app.route("/about")
@@ -95,12 +96,14 @@ def account():
         form.email.data = current_user.email
     profile_pic_path = url_for('static', filename = 'Images/' + current_user.profile_pic_path)
     return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path, form = form)
-
 @app.route("/post/new", methods = ['GET', 'POST'])
 @login_required
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
+        post = Post(title=form.title.data, content = form.content, author = current_user)
+        db.session.add(post)
+        db.session.commit()
         flash('Your post has been created', 'success')
         return redirect(url_for('home'))
     return render_template('create.html', title = 'New Post', form = form)
