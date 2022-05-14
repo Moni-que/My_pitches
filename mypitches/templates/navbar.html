@@ -11,12 +11,20 @@
           <li class="nav-item">
             <a class="nav-link text-light" href="{{ url_for('about') }}">About</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{{ url_for('register') }}">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="{{ url_for('login') }}">Login</a>
-          </li>
+          <div>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link text-light" href="{{ url_for('logout') }}">Logout</a>
+            </li>
+            {% else%}
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{{ url_for('register') }}">Register</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="{{ url_for('login') }}">Login</a>
+              </li>
+            {% endif %}
+          </div>
         </ul>
       </div>
     </div>
