@@ -1,9 +1,11 @@
-from fileinput import filename
+# from fileinput import filename
 from flask import render_template,url_for, flash, redirect,request
 from mypitches import app, db,bcrypt
 from mypitches.forms import RegisterForm, LoginForm, UpdateAccountForm
 from mypitches.models import User, Post
 from flask_login import login_user, current_user,logout_user,login_required
+import secrets
+import os
 
 
 posts = [
@@ -67,16 +69,28 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(10)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/Images', 'picture_fn')
+    form_picture.save(picture_path)
+    return picture_fn
+
 @app.route("/account", methods = ['GET', 'POST'])
 @login_required
 def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        db.session.commit()
-        flash('account updated!', 'success')
-        return redirect (url_for('account'))
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.profile_pic_path = form.profile_pic_path.data
+            current_user.username = form.username.data
+            current_user.email = form.email.data
+            db.session.commit()  
+            flash('account updated!', 'success')
+            return redirect (url_for('account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
