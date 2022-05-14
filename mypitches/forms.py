@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField,FileAllowed
-from wtforms import StringField,PasswordField, SubmitField, BooleanField
+from wtforms import StringField,PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import InputRequired,Length,Email, EqualTo,ValidationError
 from mypitches.models import User
 from flask_login import current_user
@@ -48,3 +48,8 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email = email.data).first()
             if user :
                 raise ValidationError('email unavailable')
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[InputRequired])
+    content = TextAreaField('content', validators=[InputRequired])
+    submit = SubmitField('Post')
