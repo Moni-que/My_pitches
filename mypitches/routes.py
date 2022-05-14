@@ -1,7 +1,7 @@
 from fileinput import filename
 from flask import render_template,url_for, flash, redirect,request
 from mypitches import app, db,bcrypt
-from mypitches.forms import RegisterForm, LoginForm
+from mypitches.forms import RegisterForm, LoginForm, UpdateAccountForm
 from mypitches.models import User, Post
 from flask_login import login_user, current_user,logout_user,login_required
 
@@ -67,8 +67,18 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account")
+@app.route("/account", methods = ['GET', 'POST'])
 @login_required
 def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('account updated!', 'success')
+        return redirect (url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
     profile_pic_path = url_for('static', filename = 'Images/' + current_user.profile_pic_path)
-    return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path)
+    return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path, form = form)
