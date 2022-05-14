@@ -1,7 +1,6 @@
-# from fileinput import filename
 from flask import render_template,url_for, flash, redirect,request
 from mypitches import app, db,bcrypt
-from mypitches.forms import RegisterForm, LoginForm, UpdateAccountForm
+from mypitches.forms import RegisterForm, LoginForm, UpdateAccountForm, PostForm
 from mypitches.models import User, Post
 from flask_login import login_user, current_user,logout_user,login_required
 import secrets
@@ -96,3 +95,12 @@ def account():
         form.email.data = current_user.email
     profile_pic_path = url_for('static', filename = 'Images/' + current_user.profile_pic_path)
     return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path, form = form)
+
+@app.route("/post/new", methods = ['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        flash('Your post has been created', 'success')
+        return redirect(url_for('home'))
+    return render_template('create.html', title = 'New Post', form = form)
