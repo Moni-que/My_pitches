@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField,FileAllowed
 from wtforms import StringField,PasswordField, SubmitField, BooleanField
 from wtforms.validators import InputRequired,Length,Email, EqualTo,ValidationError
 from mypitches.models import User
@@ -32,6 +33,7 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validaters = [InputRequired(),Length(min = 5, max = 20)])
     email = StringField('Email', validators = [InputRequired(), Email()])
+    picture = FileField('Update Prifile Picture', validators=[FileAllowed(['jpg','png'])])
     submit = SubmitField('Update')
 
     def validate_username(self, username):
