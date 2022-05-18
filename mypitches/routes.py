@@ -1,4 +1,4 @@
-from flask import render_template,url_for, flash, redirect,request
+from flask import render_template,url_for, flash, redirect,request,abort
 from mypitches import app, db,bcrypt
 from mypitches.forms import RegisterForm, LoginForm, UpdateAccountForm, PostForm
 from mypitches.models import User, Post
@@ -7,20 +7,20 @@ import secrets
 import os
 
 
-# posts = [
-#     {
-#         'author':'monique',
-#         'title':'Blog_post_1',
-#         'content':'first_content',
-#         'date_posted':'April 1 2022'
-#     },
-#     {
-#         'author':'bambi',
-#         'title':'Blog_post_2',
-#         'content':'second_content',
-#         'date_posted':'April 1 2021'
-#     }
-# ]
+posts = [
+    {
+        'author':'monique',
+        'title':'Blog_post_1',
+        'content':'first_content',
+        'date_posted':'April 1 2022'
+    },
+    {
+        'author':'bambi',
+        'title':'Blog_post_2',
+        'content':'second_content',
+        'date_posted':'April 1 2021'
+    }
+]
 
 
 @app.route("/")
@@ -74,7 +74,7 @@ def save_picture(form_picture):
     random_hex = secrets.token_hex(10)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/Images', 'picture_fn')
+    picture_path = os.path.join(app.root_path, 'static/Images', picture_fn)
     form_picture.save(picture_path)
     return picture_fn
 
@@ -85,25 +85,27 @@ def account():
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
-            current_user.profile_pic_path = form.profile_pic_path.data
+            current_user.profile_pic_path = picture_file
             current_user.username = form.username.data
             current_user.email = form.email.data
             db.session.commit()  
             flash('account updated!', 'success')
             return redirect (url_for('account'))
     elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.email.data = current_user.email
-    profile_pic_path = url_for('static', filename = 'Images/' + current_user.profile_pic_path)
+        form.username.data == current_user.username
+        form.email.data == current_user.email
+    profile_pic_path = url_for('static', filename = 'static/Images/' + current_user.profile_pic_path)
     return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path, form = form)
 @app.route("/post/new", methods = ['GET', 'POST'])
 @login_required
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content = form.content, author = current_user)
+        post = Post(title=form.title.data, content = form.content.data, author = current_user)
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created', 'success')
         return redirect(url_for('home'))
     return render_template('create.html', title = 'New Post', form = form)
+
+    
