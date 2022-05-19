@@ -2,18 +2,24 @@
 
 {% block content %}
     {% for post in posts %}
-    <img class="rounded-circle article-image" src = "{{ url_for('static', filename = 'Images/' + post.author.profile_pic_path) }}" >
-    <div class="card w-75">
-        <div class="card-title">
-            <h3>{{ post.title }}</h3>
-        </div>
-        <div class="card-body">
-            <p>{{ post.content }}</p>
-        </div>
-        <div class="card-footer">
-            <small> By: {{ post.author.username }}</small>
-            <small> Posted on: {{ post.date_posted }}</small>
+    <div class="mt-3 ">
+        <div class="card mt-5 p-1 bg-dark">
+            <div class="row">
+                <div class="col-md-4 d-flex justify-content-center">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-header">
+                        <h3><a class="text-light text-decoration-none" href="{{ url_for('post', post_id = post.id) }}">{{ post.title }}</a></h3>
+                    </div>
+                    <div class="text-light card-body">
+                        <p>{{ post.content }}</p>
+                    </div>
+                    <div class="card-footer text-light">
+                        <span>Posted By {{ post.author.username }} On: {{ post.date_posted.strftime('%d-%m-%Y') }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     {% endfor %}
-{% endblock %}
+{% endblock%}

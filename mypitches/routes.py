@@ -1,27 +1,10 @@
+import secrets
+import os
 from flask import render_template,url_for, flash, redirect,request,abort
 from mypitches import app, db,bcrypt
 from mypitches.forms import RegisterForm, LoginForm, UpdateAccountForm, PostForm
 from mypitches.models import User, Post
 from flask_login import login_user, current_user,logout_user,login_required
-import secrets
-import os
-
-
-posts = [
-    {
-        'author':'monique',
-        'title':'Blog_post_1',
-        'content':'first_content',
-        'date_posted':'April 1 2022'
-    },
-    {
-        'author':'bambi',
-        'title':'Blog_post_2',
-        'content':'second_content',
-        'date_posted':'April 1 2021'
-    }
-]
-
 
 @app.route("/")
 @app.route("/home")
@@ -54,7 +37,7 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email = form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember = form.remember.data)
             next_page = request.args.get('next')
@@ -74,7 +57,7 @@ def save_picture(form_picture):
     random_hex = secrets.token_hex(10)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/Images', picture_fn)
+    picture_path = os.path.join(app.root_path, 'static/Images/', picture_fn)
     form_picture.save(picture_path)
     return picture_fn
 
@@ -96,6 +79,7 @@ def account():
         form.email.data == current_user.email
     profile_pic_path = url_for('static', filename = 'static/Images/' + current_user.profile_pic_path)
     return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path, form = form)
+
 @app.route("/post/new", methods = ['GET', 'POST'])
 @login_required
 def new_post():
@@ -106,6 +90,42 @@ def new_post():
         db.session.commit()
         flash('Your post has been created', 'success')
         return redirect(url_for('home'))
-    return render_template('create.html', title = 'New Post', form = form)
+    return render_template('post.html', title = 'New Post', form = form)
+
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('my_post.html', title = post.title, post = post)
+
+@app.route("/post/<int:post_id>/update", methods = ['GET', 'POST'])
+@login_required
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Post Updated', 'success')
+        return redirect(url_for('post',post_id = post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+    return render_template('post.html', title = 'Update Post', form = form, legend='Update Post')
+
+@app.route("/post/<int:post_id>/delete", methods = ['POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Post Deleted', 'success')
+    return redirect(url_for('home'))
+
+
 
     
