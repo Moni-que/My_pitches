@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="content-section text-center bg-light mt-5 px-3">
-    <form class="mt-2 pb-3 w-75 " method="POST">
+<div class="content-section text-center mt-5">
+    <form class="pt-3 px-3 m-auto w-75 bg-light" method="POST">
         <fieldset class = "form-group">
             {{ form.hidden_tag() }}
-            <legend>{{ legend }}</legend>
+            <legend>Create A New Pitch</legend>
             <div class = "form-group">
                 {% if form.title.errors %} 
                     {{ form.title(class= "form-control form-control-lg is-invalid") }}
@@ -17,7 +17,7 @@
                     {{ form.title (class="form-control form-control-lg mt-2", placeholder="Title") }}
                 {% endif %}
             </div>
-            <div class = "form-group">
+            <div class = "form-group mt-4">
                 {% if form.content.errors %} 
                     {{ form.content(class= "form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
@@ -30,7 +30,7 @@
                 {% endif %}
             </div>
         </fieldset>
-        <div class = "form-group mt-3">
+        <div class = "form-group pb-3 mt-3">
             {{ form.submit(class = "btn btn-outline-info px-4") }}
         </div>
     </form>

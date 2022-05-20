@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-success">
+<nav class="mynav navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,7 @@
           <div class="navbar-nav">
             {% if current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link text-light" href="{{ url_for('new_post') }}">New Post</a>
+              <a class="nav-link text-light" href="{{ url_for('new_post') }}">New Pitch</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-light" href="{{ url_for('account') }}">Account</a>
@@ -25,9 +25,6 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link text-light" href="{{ url_for('login') }}">Login</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="{{ url_for('about') }}">About</a>
               </li>
             {% endif %}
           </div>

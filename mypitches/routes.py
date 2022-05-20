@@ -12,10 +12,6 @@ def home():
     posts = Post.query.all()
     return render_template('home.html', posts=posts)
 
-@app.route("/about")
-def about():
-    return render_template('about.html', title='about')
-
 
 @app.route("/register", methods = ['GET', 'POST'])
 def register():
@@ -74,11 +70,11 @@ def account():
             db.session.commit()  
             flash('account updated!', 'success')
             return redirect (url_for('account'))
-    elif request.method == 'GET':
-        form.username.data == current_user.username
-        form.email.data == current_user.email
-    profile_pic_path = url_for('static', filename = 'static/Images/' + current_user.profile_pic_path)
-    return render_template('account.html',title = 'Account', profile_pic_path = profile_pic_path, form = form)
+    elif request.method=='GET':
+        form.username.data==current_user.username
+        form.email.data==current_user.email
+    # profile_pic_path = url_for('static', filename = 'static/Images' + current_user.profile_pic_path)
+    return render_template('account.html',title = 'Account', form = form)
 
 @app.route("/post/new", methods = ['GET', 'POST'])
 @login_required
@@ -125,7 +121,6 @@ def delete_post(post_id):
     db.session.commit()
     flash('Post Deleted', 'success')
     return redirect(url_for('home'))
-
 
 
     

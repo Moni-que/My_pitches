@@ -1,0 +1,10 @@
+.wholebody{
+    background-image: url(https://images.unsplash.com/photo-1487088678257-3a541e6e3922?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=60&raw_url=true&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cXVvdGVzJTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500);
+    background-size: cover;
+}
+.mynav{
+    background-color: black;
+}
+li :hover{
+    background-color: red;
+}

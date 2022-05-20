@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-        <div class="content-section text-center">
-            <form class="mt-2 pb-3 w-75 " method="POST">
+<div class="text-center d-flex justify-content-center mt-5">
+        <div class="w-50 content-section text-center  bg-light">
+            <form class="m-auto mt-2 pt-5 pb-3 mx-5 " method="POST">
                 <fieldset class = "form-group">
                     {{ form.hidden_tag() }}
-                    <legend>Join The Legends Here</legend>
+                    <legend class="text-center">CREATE ACCOUNT</legend>
                     <div class = "form-group">
                         {% if form.username.errors %} 
                             {{ form.username(class= "form-control form-control-lg is-invalid") }}
@@ -58,10 +59,11 @@
                     </div>
                 </fieldset>
             </form>
+            <div class="mt-3 pb-3 text-center text-dark">
+                <small>Already have an account?<a class="mx-2" href="{{ url_for('login') }}">Login</a></small>
+            </div>
         </div>
-        <div class="mt-3 text-center w-75">
-            <small>Already have an account?<a class="mx-2" href="{{ url_for('login') }}">Login</a></small>
-        </div>
+</div>
         
     {% endblock %}
 
